@@ -5,3 +5,43 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Movie {
+  id          String   @id @default(uuid())
+  title       String
+  overview    String?
+  releaseYear Int
+  geners      String[] @default([])
+  runtime     Int?
+  posterUrl   String?
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum WatchListStatus {
+  PLANNED
+  WATCHING
+  COMPLETED
+  DROPED
+}
+
+model WatchListItem {
+  id        String          @id @default(uuid())
+  userId    String
+  movieId   String
+  rating    Int?
+  status    WatchListStatus @default(PLANNED)
+  notes     String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}

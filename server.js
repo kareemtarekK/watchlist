@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { DBconnect, DBdisconnect, prisma } from "./src/db/prisma.js";
 
 dotenv.config({ path: "./.env" });
+DBconnect();
 
 const app = express();
 app.use(morgan("tiny"));
@@ -16,7 +17,6 @@ const port = process.env.PORT || 8080;
 
 const server = app.listen(port, "127.0.0.1", () => {
   console.log(`server is running on port: ${port}`);
-  DBconnect();
 });
 
 process.on("unhandledRejection", (err) => {
