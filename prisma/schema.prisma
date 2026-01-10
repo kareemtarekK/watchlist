@@ -7,12 +7,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String          @id @default(uuid())
+  name           String
+  email          String          @unique
+  password       String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  watchlistItems WatchListItem[] @relation("userWatchlistItem")
+  movies         Movie[]         @relation("create movie")
 }
 
 model Movie {
@@ -26,6 +28,10 @@ model Movie {
   createdBy   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  watchListItems WatchListItem[] @relation("moviehaveWatchlistItem")
+
+  user User @relation("create movie", fields: [createdBy], references: [id], onDelete: Cascade)
 }
 
 enum WatchListStatus {
@@ -44,4 +50,7 @@ model WatchListItem {
   notes     String?
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
+
+  user  User  @relation("userWatchlistItem", fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation("moviehaveWatchlistItem", fields: [movieId], references: [id], onDelete: Cascade)
 }
