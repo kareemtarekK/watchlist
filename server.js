@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { DBconnect, DBdisconnect, prisma } from "./src/db/prisma.js";
 
 dotenv.config({ path: "./.env" });
+// console.log(process.env.DATABASE_URL);
 DBconnect();
 
 const app = express();

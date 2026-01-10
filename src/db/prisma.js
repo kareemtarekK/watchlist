@@ -5,8 +5,13 @@ import "dotenv/config";
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
 });
-
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient({
+  adapter,
+  log:
+    process.env.NODE_ENV === "development"
+      ? ["query", "error", "info", "warn"]
+      : ["error"],
+});
 
 const DBconnect = async () => {
   try {
