@@ -9,8 +9,13 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 const DBconnect = async () => {
-  await prisma.$connect();
-  console.log("connected to postgresql database ✅");
+  try {
+    await prisma.$connect();
+    console.log("connected to postgresql database ✅");
+  } catch (err) {
+    console.log(`error in connect to database ${err.message}`);
+    process.exit(1);
+  }
 };
 
 const DBdisconnect = async () => {
