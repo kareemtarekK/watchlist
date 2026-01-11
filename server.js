@@ -1,7 +1,10 @@
 import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
+
 import { DBconnect, DBdisconnect, prisma } from "./src/db/prisma.js";
+import userRouter from "./src/routes/userRouter.js";
 
 dotenv.config({ path: "./.env" });
 // console.log(process.env.DATABASE_URL);
@@ -9,10 +12,13 @@ DBconnect();
 
 const app = express();
 app.use(morgan("tiny"));
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   res.send("hello watchlist");
 });
+
+app.use("/api/v1/auth", userRouter);
 
 const port = process.env.PORT || 8080;
 
