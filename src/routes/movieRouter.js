@@ -4,6 +4,15 @@ import { protect } from "./../auth/protect.js";
 
 const movieRouter = express.Router();
 
-movieRouter.route("/").post(createMovie).get(protect, getAllMovies);
+movieRouter
+  .route("/")
+  .post(createMovie)
+  .get(
+    protect,
+    (req, res, next) => {
+      next(new Error("hello"));
+    },
+    getAllMovies
+  );
 
 export default movieRouter;

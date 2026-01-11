@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import "dotenv/config";
 import { prisma } from "./../db/prisma.js";
 import { generateToken } from "./../config/token.js";
+import { AppError } from "./../../utils/AppError.js";
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -24,30 +25,20 @@ const register = async (req, res) => {
   });
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password)
-    return res.status(401).json({
-      status: "fail",
-      message: "email and password are required",
-    });
+    return next(new AppError("email and password are required", 401));
 
   const user = await prisma.user.findUnique({
     where: { email },
   });
-  if (!user)
-    return res.status(401).json({
-      status: "fail",
-      message: "email or password is not correct",
-    });
+  if (!user) return next(new AppError("email or password is not correct", 401));
 
   const checkPassword = await bcrypt.compare(password, user.password);
 
   if (!checkPassword)
-    return res.status(401).json({
-      status: "fail",
-      message: "email or password is not correct",
-    });
+    return next(new AppError("email or password is not correct", 401));
 
   const token = generateToken(res, user);
 
@@ -81,11 +72,7 @@ const getallUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   const { id } = req.params;
-  if (!id)
-    return res.status(400).json({
-      status: "fail",
-      message: "provide id to get user",
-    });
+  if (!id) return next(new AppError("provide id to get user", 400));
   const user = await prisma.user.findFirst({
     where: { id },
     select: {
@@ -96,11 +83,7 @@ const getUser = async (req, res) => {
       updatedAt: true,
     },
   });
-  if (!user)
-    return res.status(400).json({
-      status: "fail",
-      message: "No user found with that id",
-    });
+  if (!user) return next(new AppError("No user found with that id", 400));
   res.status(200).json({
     status: "success",
     data: {
@@ -112,19 +95,11 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
-  if (!id)
-    return res.status(400).json({
-      status: "fail",
-      message: "provide id to get user",
-    });
+  if (!id) return next(new AppError("provide id to get user", 400));
   const user = await prisma.user.findFirst({
     where: { id },
   });
-  if (!user)
-    return res.status(400).json({
-      status: "fail",
-      message: "No user found with that id",
-    });
+  if (!user) return next(new AppError("No user found with that id", 400));
   const updatedUser = await prisma.user.update({
     where: { id },
     data: { name },
@@ -146,19 +121,11 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const { id } = req.params;
-  if (!id)
-    return res.status(400).json({
-      status: "fail",
-      message: "provide id to get user",
-    });
+  if (!id) return next(new AppError("provide id to get user", 400));
   const user = await prisma.user.findFirst({
     where: { id },
   });
-  if (!user)
-    return res.status(400).json({
-      status: "fail",
-      message: "No user found with that id",
-    });
+  if (!user) return next(new AppError("No user found with that id", 400));
   const deletedUser = await prisma.user.delete({
     where: { id },
     select: {
