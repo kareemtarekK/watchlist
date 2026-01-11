@@ -1,4 +1,3 @@
-// import { prisma } from "./../db/prisma.js";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
@@ -15,7 +14,7 @@ const prisma = new PrismaClient({
       : ["error"],
 });
 
-const main = async (req, res) => {
+const main = async () => {
   const moviesArr = [
     {
       title: "Gladiator",
@@ -138,7 +137,6 @@ const main = async (req, res) => {
 main()
   .catch(async (err) => {
     console.log(`something wrong in create movie ${err.message}`);
-    await prisma.$disconnect();
     process.exit(1);
   })
   .finally(async () => {
