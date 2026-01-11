@@ -29,7 +29,11 @@ const getAllWatchlistItems = async (req, res) => {
       status: true,
       notes: true,
       rating: true,
+      createdAt: true,
+      updatedAt: true,
     },
+    orderBy: { createdAt: "desc" },
+    take: 2,
   });
   res.status(200).json({
     status: "success",
