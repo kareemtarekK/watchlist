@@ -7,11 +7,10 @@ import {
   updateUser,
   deleteUser,
 } from "./../controllers/user.js";
-import { protect } from "./../auth/protect.js";
 const userRouter = express.Router();
 
 userRouter.post("/register", register);
-userRouter.post("/login", protect, login);
+userRouter.post("/login", login);
 
 userRouter.get("/", getallUsers);
 
