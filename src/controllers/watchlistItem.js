@@ -14,7 +14,23 @@ const createWatchlistItem = async (req, res) => {
 };
 
 const getAllWatchlistItems = async (req, res) => {
-  const watchlistItems = await prisma.watchListItem.findMany();
+  const watchlistItems = await prisma.watchListItem.findMany({
+    select: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+      movie: true,
+      status: true,
+      notes: true,
+      rating: true,
+    },
+  });
   res.status(200).json({
     status: "success",
     length: watchlistItems.length,
