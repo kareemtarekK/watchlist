@@ -1,8 +1,8 @@
 import { prisma } from "./../db/prisma.js";
-import { catchAync } from "./../../utils/catchAsync.js";
+import { catchAsync } from "./../../utils/catchAsync.js";
 import { AppError } from "./../../utils/AppError.js";
 
-const createMovie = catchAync(async (req, res) => {
+const createMovie = catchAsync(async (req, res) => {
   const {
     title,
     overview,
@@ -33,7 +33,7 @@ const createMovie = catchAync(async (req, res) => {
   });
 });
 
-const getAllMovies = catchAync(async (req, res) => {
+const getAllMovies = catchAsync(async (req, res) => {
   const movies = await prisma.movie.findMany({
     include: {
       user: true,
