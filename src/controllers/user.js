@@ -60,4 +60,15 @@ const login = async (req, res) => {
   });
 };
 
+const getallUsers = async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.status(200).json({
+    status: "success",
+    length: users.length,
+    data: {
+      users,
+    },
+  });
+};
+
 export { register, login };
