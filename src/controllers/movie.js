@@ -1,5 +1,8 @@
 import { prisma } from "./../db/prisma.js";
-const createMovie = async (req, res) => {
+import { catchAync } from "./../../utils/catchAsync.js";
+import { AppError } from "./../../utils/AppError.js";
+
+const createMovie = catchAync(async (req, res) => {
   const {
     title,
     overview,
@@ -9,6 +12,7 @@ const createMovie = async (req, res) => {
     posterUrl,
     createdBy,
   } = req.body;
+
   const movie = await prisma.movie.create({
     data: {
       title,
@@ -20,15 +24,16 @@ const createMovie = async (req, res) => {
       createdBy,
     },
   });
+
   res.status(201).json({
     status: "success",
     data: {
       movie,
     },
   });
-};
+});
 
-const getAllMovies = async (req, res) => {
+const getAllMovies = catchAync(async (req, res) => {
   const movies = await prisma.movie.findMany({
     include: {
       user: true,
@@ -41,6 +46,6 @@ const getAllMovies = async (req, res) => {
       movies,
     },
   });
-};
+});
 
 export { createMovie, getAllMovies };
