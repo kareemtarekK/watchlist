@@ -8,6 +8,7 @@ import { DBconnect, DBdisconnect, prisma } from "./src/db/prisma.js";
 import userRouter from "./src/routes/userRouter.js";
 import movieRouter from "./src/routes/movieRouter.js";
 import watchlistItemRouter from "./src/routes/watchlistItem.js";
+import globalErrorHandling from "./utils/globalErrorHandling.js";
 
 dotenv.config({ path: "./.env" });
 // console.log(process.env.DATABASE_URL);
@@ -25,6 +26,8 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", userRouter);
 app.use("/api/v1/movies", movieRouter);
 app.use("/api/v1/watchlistItems", watchlistItemRouter);
+
+app.use(globalErrorHandling);
 
 const port = process.env.PORT || 8080;
 
