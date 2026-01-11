@@ -1,9 +1,9 @@
 import { prisma } from "./../db/prisma.js";
 
 const createWatchlistItem = async (req, res) => {
-  const { userId, movieId, rating, notes } = req.body;
+  const { userId, movieId, rating, notes, status } = req.body;
   const watchlistItem = await prisma.watchListItem.create({
-    data: { userId, movieId, rating, notes },
+    data: { userId, movieId, rating, notes, status },
   });
   res.status(201).json({
     status: "success",
