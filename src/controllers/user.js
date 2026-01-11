@@ -3,8 +3,9 @@ import "dotenv/config";
 import { prisma } from "./../db/prisma.js";
 import { generateToken } from "./../config/token.js";
 import { AppError } from "./../../utils/AppError.js";
+import { catchAsync } from "./../../utils/catchAsync.js";
 
-const register = async (req, res) => {
+const register = catchAsync(async (req, res) => {
   const { name, email, password } = req.body;
 
   const salt = await bcrypt.genSalt(10);
@@ -23,9 +24,9 @@ const register = async (req, res) => {
       token,
     },
   });
-};
+});
 
-const login = async (req, res, next) => {
+const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password)
     return next(new AppError("email and password are required", 401));
@@ -49,9 +50,9 @@ const login = async (req, res, next) => {
       token,
     },
   });
-};
+});
 
-const getallUsers = async (req, res) => {
+const getallUsers = catchAsync(async (req, res) => {
   const users = await prisma.user.findMany({
     select: {
       id: true,
@@ -68,9 +69,9 @@ const getallUsers = async (req, res) => {
       users,
     },
   });
-};
+});
 
-const getUser = async (req, res) => {
+const getUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   if (!id) return next(new AppError("provide id to get user", 400));
   const user = await prisma.user.findFirst({
@@ -90,9 +91,9 @@ const getUser = async (req, res) => {
       user,
     },
   });
-};
+});
 
-const updateUser = async (req, res) => {
+const updateUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
   if (!id) return next(new AppError("provide id to get user", 400));
@@ -117,9 +118,9 @@ const updateUser = async (req, res) => {
       user: updatedUser,
     },
   });
-};
+});
 
-const deleteUser = async (req, res) => {
+const deleteUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   if (!id) return next(new AppError("provide id to get user", 400));
   const user = await prisma.user.findFirst({
@@ -142,6 +143,6 @@ const deleteUser = async (req, res) => {
       user: deletedUser,
     },
   });
-};
+});
 
 export { register, login, getallUsers, getUser, updateUser, deleteUser };
