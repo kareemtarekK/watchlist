@@ -32,7 +32,9 @@ const login = async (req, res) => {
       message: "email and password are required",
     });
 
-  const user = await prisma.user.findUnique(email);
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
   if (!user)
     return res.status(401).json({
       status: "fail",
@@ -52,10 +54,10 @@ const login = async (req, res) => {
   res.status(200).json({
     status: "success",
     data: {
-      user,
+      user: { ...user, password: undefined },
       token,
     },
   });
 };
 
-export { register };
+export { register, login };
