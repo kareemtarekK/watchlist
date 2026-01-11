@@ -94,4 +94,32 @@ const getUser = async (req, res) => {
   });
 };
 
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  if (!id)
+    return res.status(400).json({
+      status: "fail",
+      message: "provide id to get user",
+    });
+  const user = await prisma.user.findFirst({
+    where: { id },
+  });
+  if (!user)
+    return res.status(400).json({
+      status: "fail",
+      message: "No user found with that id",
+    });
+  const updatedUser = await prisma.user.update({
+    where: { id },
+    data: { name },
+  });
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: updatedUser,
+    },
+  });
+};
+
 export { register, login };
