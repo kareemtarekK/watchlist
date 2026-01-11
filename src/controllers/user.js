@@ -61,7 +61,15 @@ const login = async (req, res) => {
 };
 
 const getallUsers = async (req, res) => {
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
   res.status(200).json({
     status: "success",
     length: users.length,
@@ -80,6 +88,13 @@ const getUser = async (req, res) => {
     });
   const user = await prisma.user.findFirst({
     where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
   if (!user)
     return res.status(400).json({
@@ -113,6 +128,13 @@ const updateUser = async (req, res) => {
   const updatedUser = await prisma.user.update({
     where: { id },
     data: { name },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
   res.status(200).json({
     status: "success",
@@ -139,6 +161,13 @@ const deleteUser = async (req, res) => {
     });
   const deletedUser = await prisma.user.delete({
     where: { id },
+    select: {
+      name: true,
+      email: true,
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
   res.status(200).json({
     status: "success",
