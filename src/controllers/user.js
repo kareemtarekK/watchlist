@@ -148,4 +148,4 @@ const deleteUser = async (req, res) => {
   });
 };
 
-export { register, login };
+export { register, login, getallUsers, getUser, updateUser, deleteUser };
