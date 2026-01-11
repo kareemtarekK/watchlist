@@ -1,8 +1,10 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { prisma } from "./../db/prisma.js";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { AppError } from "../../utils/AppError.js";
 
-const protect = async (req, res, next) => {
+const protect = catchAsync(async (req, res, next) => {
   try {
     //   console.log(req.cookies);
     //   console.log(req.headers);
@@ -17,24 +19,19 @@ const protect = async (req, res, next) => {
       token = req.cookies.token;
     }
     if (!token)
-      return res.status(401).json({
-        status: "fail",
-        message: "You are not logged in, unauthorized access",
-      });
+      return next(
+        new AppError("You are not logged in, unauthorized access", 401)
+      );
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     const user = await prisma.user.findFirst({
       where: { id: payload.id },
     });
-    if (!user)
-      return res.status(401).json({
-        status: "fail",
-        message: "unauthorized access",
-      });
+    if (!user) return next(new AppError("unauthorized access", 401));
     req.user = user;
     next();
   } catch (err) {
     console.log(err.message);
   }
-};
+});
 
 export { protect };
