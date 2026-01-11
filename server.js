@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 import { DBconnect, DBdisconnect, prisma } from "./src/db/prisma.js";
 import userRouter from "./src/routes/userRouter.js";
@@ -15,6 +16,7 @@ DBconnect();
 const app = express();
 app.use(morgan("tiny"));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("hello watchlist");
