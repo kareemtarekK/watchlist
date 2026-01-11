@@ -29,7 +29,11 @@ const createMovie = async (req, res) => {
 };
 
 const getAllMovies = async (req, res) => {
-  const movies = await prisma.movie.findMany({});
+  const movies = await prisma.movie.findMany({
+    include: {
+      user: true,
+    },
+  });
   res.status(200).json({
     status: "success",
     length: movies.length,
