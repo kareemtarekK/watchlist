@@ -52,6 +52,15 @@ const login = catchAsync(async (req, res, next) => {
   });
 });
 
+const logout = catchAsync(async (req, res, next) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production" ? true : false,
+    maxAge: 0,
+    samesite: "strict",
+  });
+});
+
 const getallUsers = catchAsync(async (req, res) => {
   const users = await prisma.user.findMany({
     select: {
@@ -145,4 +154,12 @@ const deleteUser = catchAsync(async (req, res) => {
   });
 });
 
-export { register, login, getallUsers, getUser, updateUser, deleteUser };
+export {
+  register,
+  login,
+  getallUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+  logout,
+};
