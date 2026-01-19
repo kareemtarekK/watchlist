@@ -8,11 +8,16 @@ import {
   deleteUser,
   logout,
 } from "./../controllers/user.js";
+
 import { protect } from "./../auth/protect.js";
+
+import userValidationSchema from "../validation/validators/userValidation.js";
+
+import { validateRequest } from "../validation/validateRequest.js";
 const userRouter = express.Router();
 
 userRouter.get("/logout", logout);
-userRouter.post("/register", register);
+userRouter.post("/register", validateRequest(userValidationSchema), register);
 userRouter.post("/login", login);
 
 userRouter.get("/", protect, getallUsers);
