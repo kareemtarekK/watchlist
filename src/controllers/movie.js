@@ -62,4 +62,44 @@ const getMovie = catchAsync(async (req, res, next) => {
   });
 });
 
-export { createMovie, getAllMovies, getMovie };
+const updateMovie = catchAsync(async (req, res, next) => {
+  const { movieId } = req.params;
+  const {
+    title,
+    overview,
+    releaseYear,
+    geners,
+    runtime,
+    posterUrl,
+    createdBy,
+  } = req.body;
+  if (!movieId) return next(new AppError("No movie id found on request", 404));
+  const movie = await prisma.movie.findFirst({
+    where: { id: movieId },
+  });
+  if (!movie) return next(new AppError("No movie with this id", 400));
+  const created = await prisma.user.findFirst({
+    where: { id: createdBy },
+  });
+  if (!created) return next(new AppError("No user with that id ", 404));
+  const updatedMovie = await prisma.movie.update({
+    where: { id: movieId },
+    data: {
+      title,
+      overview,
+      releaseYear,
+      geners,
+      runtime,
+      posterUrl,
+      createdBy,
+    },
+  });
+  res.status(200).json({
+    status: "success",
+    data: {
+      movie: updatedMovie,
+    },
+  });
+});
+
+export { createMovie, getAllMovies, getMovie, updateMovie };
