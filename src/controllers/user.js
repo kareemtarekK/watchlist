@@ -59,6 +59,10 @@ const logout = catchAsync(async (req, res, next) => {
     maxAge: 0,
     samesite: "strict",
   });
+  res.status(200).json({
+    status: "success",
+    message: "logout ✅",
+  });
 });
 
 const getallUsers = catchAsync(async (req, res) => {
