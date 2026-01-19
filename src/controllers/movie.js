@@ -102,4 +102,18 @@ const updateMovie = catchAsync(async (req, res, next) => {
   });
 });
 
-export { createMovie, getAllMovies, getMovie, updateMovie };
+const deleteMovie = catchAsync(async (req, res, next) => {
+  const { movieId } = req.params;
+  if (!movieId) return next(new AppError("No movie id found on request", 404));
+  const movie = await prisma.movie.delete({
+    where: { id: movieId },
+  });
+  res.status(200).json({
+    status: "success",
+    data: {
+      movie,
+    },
+  });
+});
+
+export { createMovie, getAllMovies, getMovie, updateMovie, deleteMovie };
