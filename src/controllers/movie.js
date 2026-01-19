@@ -53,6 +53,14 @@ const getMovie = catchAsync(async (req, res, next) => {
   if (!movieId) return next(new AppError("No movie id found on request", 404));
   const movie = await prisma.movie.findFirst({
     where: { id: movieId },
+    include: {
+      user: true,
+    },
+    // select: {
+    //   createdAt: false,
+    //   updatedAt: false,
+    //   geners: true,
+    // },
   });
   res.status(200).json({
     status: "success",
