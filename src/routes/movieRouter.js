@@ -10,11 +10,11 @@ import { protect } from "./../auth/protect.js";
 
 const movieRouter = express.Router();
 
-movieRouter.route("/").post(createMovie).get(protect, getAllMovies);
+movieRouter.route("/").post(protect, createMovie).get(getAllMovies);
 movieRouter
   .route("/:movieId")
   .get(getMovie)
-  .patch(updateMovie)
-  .delete(deleteMovie);
+  .patch(protect, updateMovie)
+  .delete(protect, deleteMovie);
 
 export default movieRouter;
