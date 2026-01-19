@@ -116,6 +116,7 @@ const deleteMovie = catchAsync(async (req, res, next) => {
   const movie = await prisma.movie.findFirst({
     where: { id: movieId },
   });
+  if (!movie) return next(new AppError("No movie with this id", 400));
   const deletedMovie = await prisma.movie.delete({
     where: { id: movieId },
   });
