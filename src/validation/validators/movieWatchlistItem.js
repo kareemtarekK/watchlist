@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 const movieWatchlistItemSchema = z.object({
   userId: z.string().uuid(),
   movieId: z.string().uuid(),
