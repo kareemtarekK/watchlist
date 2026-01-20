@@ -24,7 +24,7 @@ const createMovie = catchAsync(async (req, res) => {
       createdBy,
     },
   });
-
+  console.log("hello");
   res.status(201).json({
     status: "success",
     data: {
