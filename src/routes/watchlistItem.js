@@ -3,11 +3,16 @@ import {
   createWatchlistItem,
   getAllWatchlistItems,
 } from "./../controllers/watchlistItem.js";
+
+import { validateRequest } from "../validation/validateRequest.js";
+
+import movieWatchlistItemSchema from "../validation/validators/movieWatchlistItem.js";
+
 const watchlistItemRouter = express.Router();
 
 watchlistItemRouter
   .route("/")
-  .post(createWatchlistItem)
+  .post(validateRequest(movieWatchlistItemSchema), createWatchlistItem)
   .get(getAllWatchlistItems);
 
 export default watchlistItemRouter;
